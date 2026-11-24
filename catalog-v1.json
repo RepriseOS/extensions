@@ -128,7 +128,7 @@
       "id": "night-shift",
       "name": "Night Shift",
       "description": "Warm the display manually or follow sunset and sunrise in the iPod's time zone.",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": "RepriseOS and RevolaOS contributors",
       "license": "GPL-3.0-only",
       "category": "system",
@@ -140,14 +140,14 @@
       "tag_prefix": "night-shift/v",
       "details": "Press Select on Night Shift in Settings to cycle through Auto, On and Off. Auto follows sunset and sunrise in the iPod’s time zone.",
       "release": {
-        "tag": "night-shift/v0.1.1",
-        "url": "https://github.com/RepriseOS/repriseos-extensions/releases/tag/night-shift%2Fv0.1.1",
-        "commit": "efd66129fff4d38e9a527eea26f9c838dea31186",
-        "published_at": "2026-11-24T18:37:53Z"
+        "tag": "night-shift/v0.1.2",
+        "url": "https://github.com/RepriseOS/repriseos-extensions/releases/tag/night-shift%2Fv0.1.2",
+        "commit": "70da9c449915980e614674f2d1fe1388ac05cfb6",
+        "published_at": "2026-11-24T18:51:48Z"
       },
       "package": {
-        "url": "assets/night-shift/c89edb9ecd66fcd822350302781b0e8e5cceb80f910687bb8972149918c59a76/night-shift.rvx",
-        "sha256": "c89edb9ecd66fcd822350302781b0e8e5cceb80f910687bb8972149918c59a76",
+        "url": "assets/night-shift/1bdb452fc475d5532a9966100cebdc68198de0dd0565f80cb98154ce63fb2f9f/night-shift.rvx",
+        "sha256": "1bdb452fc475d5532a9966100cebdc68198de0dd0565f80cb98154ce63fb2f9f",
         "size": 5104
       },
       "icon": {
@@ -159,12 +159,12 @@
       },
       "screenshots": [
         {
-          "url": "assets/night-shift/cc5fe9320c946a368b37028e73d9c439df006a215408e135a449e367156c6e4d/settings.png",
-          "sha256": "cc5fe9320c946a368b37028e73d9c439df006a215408e135a449e367156c6e4d",
-          "size": 28684,
+          "url": "assets/night-shift/472843e5443504756c506d018e4312b2f213e03c624ada35d86de7bd7bc30e82/settings.png",
+          "sha256": "472843e5443504756c506d018e4312b2f213e03c624ada35d86de7bd7bc30e82",
+          "size": 25857,
           "width": 320,
           "height": 240,
-          "alt": "Night Shift set to On in Settings with the moon icon in the preview pane."
+          "alt": "Night Shift On. The Settings screen has a warm amber tint."
         },
         {
           "url": "assets/night-shift/66e052189e92d2e2161ea99ca6cc5501507acb2aeb0668928b55eef0907c40a4/settings-off.png",
@@ -172,7 +172,7 @@
           "size": 29150,
           "width": 320,
           "height": 240,
-          "alt": "Night Shift set to Off in Settings with the moon icon in the preview pane."
+          "alt": "Night Shift Off. The same Settings screen has its standard colors."
         }
       ]
     },
