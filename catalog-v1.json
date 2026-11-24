@@ -128,7 +128,7 @@
       "id": "night-shift",
       "name": "Night Shift",
       "description": "Warm the display manually or follow sunset and sunrise in the iPod's time zone.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": "RepriseOS and RevolaOS contributors",
       "license": "GPL-3.0-only",
       "category": "system",
@@ -138,17 +138,17 @@
       "repo": "RepriseOS/repriseos-extensions",
       "source_path": "extensions/night-shift",
       "tag_prefix": "night-shift/v",
-      "details": "Choose On, Off, or Auto in Settings > Night Shift. Auto follows sunset and sunrise in the iPod’s time zone.",
+      "details": "Press Select on Night Shift in Settings to cycle through Auto, On and Off. Auto follows sunset and sunrise in the iPod’s time zone.",
       "release": {
-        "tag": "night-shift/v0.1.0",
-        "url": "https://github.com/RepriseOS/repriseos-extensions/releases/tag/night-shift%2Fv0.1.0",
-        "commit": "0adfafd4c8d0594a7a350b1bee6cf84f3f86d089",
-        "published_at": "2026-11-24T14:53:48Z"
+        "tag": "night-shift/v0.1.1",
+        "url": "https://github.com/RepriseOS/repriseos-extensions/releases/tag/night-shift%2Fv0.1.1",
+        "commit": "efd66129fff4d38e9a527eea26f9c838dea31186",
+        "published_at": "2026-11-24T18:37:53Z"
       },
       "package": {
-        "url": "assets/night-shift/c73f849b2e94ab5fb0c562985a026b54fb6a3cd51bdb5eb321d287f95e559137/night-shift.rvx",
-        "sha256": "c73f849b2e94ab5fb0c562985a026b54fb6a3cd51bdb5eb321d287f95e559137",
-        "size": 5172
+        "url": "assets/night-shift/c89edb9ecd66fcd822350302781b0e8e5cceb80f910687bb8972149918c59a76/night-shift.rvx",
+        "sha256": "c89edb9ecd66fcd822350302781b0e8e5cceb80f910687bb8972149918c59a76",
+        "size": 5104
       },
       "icon": {
         "url": "assets/night-shift/1d6b73bf783857ca8f7dbee4c925152d6e3b3affb3fd7c9a69077a8adbdaf114/settings-night-shift.png",
@@ -159,12 +159,20 @@
       },
       "screenshots": [
         {
-          "url": "assets/night-shift/915e16e15094c78a612c628c63621c574c289c4dd60acfa04927bf6df8e36ec2/settings.png",
-          "sha256": "915e16e15094c78a612c628c63621c574c289c4dd60acfa04927bf6df8e36ec2",
-          "size": 8241,
+          "url": "assets/night-shift/cc5fe9320c946a368b37028e73d9c439df006a215408e135a449e367156c6e4d/settings.png",
+          "sha256": "cc5fe9320c946a368b37028e73d9c439df006a215408e135a449e367156c6e4d",
+          "size": 28684,
           "width": 320,
           "height": 240,
-          "alt": "Night Shift settings with On selected and the moon icon in the preview pane."
+          "alt": "Night Shift set to On in Settings with the moon icon in the preview pane."
+        },
+        {
+          "url": "assets/night-shift/66e052189e92d2e2161ea99ca6cc5501507acb2aeb0668928b55eef0907c40a4/settings-off.png",
+          "sha256": "66e052189e92d2e2161ea99ca6cc5501507acb2aeb0668928b55eef0907c40a4",
+          "size": 29150,
+          "width": 320,
+          "height": 240,
+          "alt": "Night Shift set to Off in Settings with the moon icon in the preview pane."
         }
       ]
     },
@@ -172,7 +180,7 @@
       "id": "playback-log",
       "name": "Playback Log",
       "description": "Write a scrobbler log and optional detailed listening reports.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": "RepriseOS contributors",
       "license": "GPL-3.0-only",
       "category": "media",
@@ -184,15 +192,15 @@
       "tag_prefix": "playback-log/v",
       "details": "Enable Settings > Playback Log to record plays and skips in .scrobbler.log at the disk root. Configure optional detailed listening reports in /Reprise/playback-log.cfg.",
       "release": {
-        "tag": "playback-log/v0.1.0",
-        "url": "https://github.com/RepriseOS/repriseos-extensions/releases/tag/playback-log%2Fv0.1.0",
-        "commit": "0adfafd4c8d0594a7a350b1bee6cf84f3f86d089",
-        "published_at": "2026-11-24T14:53:44Z"
+        "tag": "playback-log/v0.1.1",
+        "url": "https://github.com/RepriseOS/repriseos-extensions/releases/tag/playback-log%2Fv0.1.1",
+        "commit": "efd66129fff4d38e9a527eea26f9c838dea31186",
+        "published_at": "2026-11-24T18:37:44Z"
       },
       "package": {
-        "url": "assets/playback-log/38c0e897e907b9e0d72be2fbbaa501271ad62601215e4f98f0c7394e1459fb23/playback-log.rvx",
-        "sha256": "38c0e897e907b9e0d72be2fbbaa501271ad62601215e4f98f0c7394e1459fb23",
-        "size": 8948
+        "url": "assets/playback-log/7d125f7470f2a790ebe8b2c0a840eaf4db2c5b9de3a300924a2bcd85fd2be881/playback-log.rvx",
+        "sha256": "7d125f7470f2a790ebe8b2c0a840eaf4db2c5b9de3a300924a2bcd85fd2be881",
+        "size": 8976
       },
       "icon": {
         "url": "assets/playback-log/8c08b77a77ca44c3a5dc0b42bbc2c9acdbb25dded451f65edf84aa5357625896/settings-playback-log.png",
@@ -203,9 +211,9 @@
       },
       "screenshots": [
         {
-          "url": "assets/playback-log/5818250fe515088097099f36eabed5a7fd763c83d696803a5273e34c1b2c43d2/settings.png",
-          "sha256": "5818250fe515088097099f36eabed5a7fd763c83d696803a5273e34c1b2c43d2",
-          "size": 29579,
+          "url": "assets/playback-log/76c8c30940f2d66f7645d2e5eb8ec449f86dae575e5f8322ff0568a31fae0a91/settings.png",
+          "sha256": "76c8c30940f2d66f7645d2e5eb8ec449f86dae575e5f8322ff0568a31fae0a91",
+          "size": 31885,
           "width": 320,
           "height": 240,
           "alt": "Playback Log enabled in Settings with its document icon."
