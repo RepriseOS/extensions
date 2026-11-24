@@ -1,0 +1,40 @@
+RepriseOS extensions
+
+Balance, Crossfeed, DSP and the Night Shift scheduling and gamma code are from
+RevolaOS extensions, revision 36d197b180e55a304ea0468de4330c0d07fe715f.
+Night Shift derives from kayboll’s RepriseOS work. Playback Log derives from
+the work of brilliant-alien and lgreitis in osos-lab. Its Settings artwork is
+from osos-lab commit 10485fa. The original RevolaOS notice follows.
+
+RevolaOS
+Copyright (C) 2026 The RevolaOS Authors. GPL-3.0-only.
+The authors are the contributors recorded in each repository's git history.
+
+Derived from RepriseOS (https://github.com/lgreitis/osos-lab), forked at
+commit 8fc840d591f48aef8b7a0ff8ff20c35cb0d91475, November 2026. Later
+upstream changes are ported individually; each port names its upstream
+commit in the commit message.
+Copyright (C) lgreitis and RepriseOS contributors. GPL-3.0-only.
+Modified by the RevolaOS authors since 2026-11-08.
+RepriseOS's history at the fork point is archived in
+https://github.com/paviro/revola-repriseos-heritage.
+
+Files that carry an "Adapted from" or copyright header keep that header.
+
+Third-party work included or built upon:
+
+- Rockbox (https://github.com/Rockbox/rockbox): the crossfeed and shelving
+  filters, the channel modes, the compressor and the auditory fatigue
+  reduction filters; Bass Enhancement and Surround are based on its perceptual
+  bass enhancement and Haas surround. GPL-2.0-or-later.
+- Cupertino Icons (https://github.com/flutter/packages): the Appearance
+  Settings glyphs, the Fatigue Reduction ear and the Sleep Timer moon. MIT,
+  see appearance/assets/LICENSE.cupertino-icons,
+  fatigue-reduction/assets/LICENSE.cupertino-icons and
+  sleep-timer/assets/LICENSE.cupertino-icons.
+- The Classic theme's dark background, carried by the Appearance extension, is
+  RepriseOS's themes/dark/background-dark-image.png by lgreitis (5ec8799).
+  GPL-3.0-only.
+
+No Apple firmware ships in this repository or its builds. Building reads the
+firmware from an IPSW the user supplies.

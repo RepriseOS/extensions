@@ -1,0 +1,17 @@
+id = "night-shift"
+name = "Night Shift"
+description = "Warm the display manually or follow sunset and sunrise in the iPod's time zone."
+version = "0.1.0"
+author = "RepriseOS and RevolaOS contributors"
+license = "GPL-3.0-only"
+api = "1.81"
+category = "system"
+
+[[module]]
+name = "main"
+trigger = "always"
+
+[[asset]]
+name = "settings-night-shift"
+file = "assets/settings-night-shift.png"
+pane = "icon"

@@ -1,0 +1,30 @@
+id = "dsp"
+name = "DSP"
+description = "Signal processing the audio effects share: the look-ahead limiter, filter designs, the biquad cascade and the maths behind them."
+version = "0.1.0"
+author = "RevolaOS"
+note = "Partly adapted from RepriseOS"
+license = "GPL-3.0-only"
+api = "1.74"
+stability = "beta"
+category = "library"
+exports = [
+    "rv_limiter_run",
+    "rv_fade_run_limited",
+    "rv_exp",
+    "rv_log",
+    "rv_sin_cos",
+    "rv_sqrt",
+    "rv_decibels",
+    "rv_dsp_biquad",
+    "rv_dsp_attenuate",
+    "rv_dsp_response",
+    "rv_dsp_peak",
+    "rv_dsp_bishelf",
+    "rv_dsp_cascade_run",
+    "rv_dsp_cascade_rest",
+]
+
+[[module]]
+name = "main"
+trigger = "always"
