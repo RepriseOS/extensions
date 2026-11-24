@@ -55,15 +55,11 @@ static const char *caption(const struct rv_context *ctx)
 }
 
 static const struct rv_setting settings[] = {
-    RV_SETTING_CHOICE(MODE, "Night Shift", NIGHT_SHIFT_OFF, night_shift_labels),
-};
-static const struct rv_screen screens[] = {
-    RV_SCREEN_CHOICE("mode", "Night Shift", MODE, night_shift_labels,
-                     .bitmap = RV_BITMAP("settings-night-shift")),
+    RV_SETTING_LABELLED(MODE, "Night Shift", NIGHT_SHIFT_OFF, night_shift_labels),
 };
 static const struct rv_menu_entry entries[] = {
     RV_MENU_ENTRY(RV_MENU_SETTINGS, RV_SETTINGS_BRIGHTNESS,
-                  RV_ROW_PUSH("Night Shift", "mode"), .caption_setting = MODE,
+                  RV_ROW_SETTING("Night Shift", MODE), .caption_setting = MODE,
                   .pane = RV_PANE(.caption_text = caption,
                                   .bitmap = RV_BITMAP("settings-night-shift"))),
 };
@@ -74,7 +70,6 @@ static const struct rv_hook hooks[] = {
 static const struct rv_descriptor extension = {
     .size = sizeof extension,
     RV_SETTINGS(settings),
-    RV_SCREENS(screens),
     RV_ENTRIES(entries),
     RV_HOOKS(hooks),
     .setting_changed = changed,

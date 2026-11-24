@@ -127,6 +127,7 @@ static void night_shift_contracts(void)
     /* On loads the warm tables; Off loads the identity ramp and frees them. */
     int out = allocations, loads = gamma_loads;
     night_shift_set(NIGHT_SHIFT_ON);
+    assert(!strcmp(night_shift_caption(), "Warm colors"));
     assert(gamma_loads == loads + 1 && allocations == out + 1);
     assert(gamma_loaded[0][255] == 1020 && gamma_loaded[1][255] == (1020 * 216) >> 8 &&
            gamma_loaded[2][255] == (1020 * 150) >> 8);
@@ -137,6 +138,7 @@ static void night_shift_contracts(void)
     night_shift_set(NIGHT_SHIFT_ON);
     assert(gamma_loads == loads + 1);
     night_shift_set(NIGHT_SHIFT_OFF);
+    assert(!strcmp(night_shift_caption(), "Standard colors"));
     assert(gamma_loads == loads + 2 && allocations == out);
     assert(gamma_loaded[1][255] == 1020 && gamma_loaded[2][128] == 512);
     assert(night_shift_init_gamma(1, 2, 3, NULL) == next_result && passed[2] == 3);

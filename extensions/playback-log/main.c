@@ -634,8 +634,9 @@ static const struct rv_setting settings[] = {
     RV_SETTING_BOOL(ENABLED, "Playback Log", 0)};
 static const struct rv_menu_entry entries[] = {
     RV_MENU_ENTRY(RV_MENU_SETTINGS, RV_SETTINGS_SOUND_CHECK,
-                  RV_ROW_SETTING("Playback Log", ENABLED), .caption_setting = ENABLED,
-                  .pane = RV_PANE(.bitmap = RV_BITMAP("settings-playback-log"))),
+                  RV_ROW_SETTING("Playback Log", ENABLED),
+                  .pane = RV_PANE(.caption = "Save Listening History",
+                                  .bitmap = RV_BITMAP("settings-playback-log"))),
 };
 static const struct rv_hook hooks[] = {
     RV_HOOK_FILTER(RV_SITE_MediaPlayer_AdvanceFinish_call, on_skip),

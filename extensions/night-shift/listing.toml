@@ -1,5 +1,9 @@
-details = "Choose On, Off, or Auto in Settings > Night Shift. Auto follows sunset and sunrise in the iPod’s time zone."
+details = "Press Select on Night Shift in Settings to cycle through Auto, On and Off. Auto follows sunset and sunrise in the iPod’s time zone."
 
 [[screenshots]]
 file = "screenshots/settings.png"
-alt = "Night Shift settings with On selected and the moon icon in the preview pane."
+alt = "Night Shift set to On in Settings with the moon icon in the preview pane."
+
+[[screenshots]]
+file = "screenshots/settings-off.png"
+alt = "Night Shift set to Off in Settings with the moon icon in the preview pane."

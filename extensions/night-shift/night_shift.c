@@ -93,7 +93,9 @@ void night_shift_stop(void)
 
 const char *night_shift_caption(void)
 {
-    return mode == NIGHT_SHIFT_AUTO ? schedule_caption() : night_shift_labels[mode];
+    if (mode == NIGHT_SHIFT_AUTO)
+        return schedule_caption();
+    return mode == NIGHT_SHIFT_ON ? "Warm colors" : "Standard colors";
 }
 
 uint32_t night_shift_init_gamma(uint32_t red, uint32_t green, uint32_t blue,
