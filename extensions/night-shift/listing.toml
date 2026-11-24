@@ -2,8 +2,8 @@ details = "Press Select on Night Shift in Settings to cycle through Auto, On and
 
 [[screenshots]]
 file = "screenshots/settings.png"
-alt = "Night Shift set to On in Settings with the moon icon in the preview pane."
+alt = "Night Shift On. The Settings screen has a warm amber tint."
 
 [[screenshots]]
 file = "screenshots/settings-off.png"
-alt = "Night Shift set to Off in Settings with the moon icon in the preview pane."
+alt = "Night Shift Off. The same Settings screen has its standard colors."
