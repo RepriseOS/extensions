@@ -47,6 +47,84 @@
       ]
     },
     {
+      "id": "crossfeed",
+      "name": "Crossfeed",
+      "description": "Blends a little of each channel into the other so hard-panned stereo is easier on headphones. A simple mode or a custom filter.",
+      "version": "0.1.0",
+      "author": "RevolaOS",
+      "license": "GPL-3.0-only",
+      "category": "effects",
+      "api": "1.78",
+      "requires": [
+        "dsp"
+      ],
+      "firmware_id": "660eb6ff",
+      "repo": "RepriseOS/repriseos-extensions",
+      "source_path": "extensions/crossfeed",
+      "tag_prefix": "crossfeed/v",
+      "details": "Open Settings > Crossfeed to blend the stereo channels for headphone listening. Choose Simple for a preset or Custom to adjust the filter and see its frequency response.",
+      "release": {
+        "tag": "crossfeed/v0.1.0",
+        "url": "https://github.com/RepriseOS/repriseos-extensions/releases/tag/crossfeed%2Fv0.1.0",
+        "commit": "0adfafd4c8d0594a7a350b1bee6cf84f3f86d089",
+        "published_at": "2026-11-24T14:53:57Z"
+      },
+      "package": {
+        "url": "assets/crossfeed/52bd2e48c84cdb9469250e312d120512d59df01ddfd571377a524bd30eb23050/crossfeed.rvx",
+        "sha256": "52bd2e48c84cdb9469250e312d120512d59df01ddfd571377a524bd30eb23050",
+        "size": 14864
+      },
+      "stability": "beta",
+      "note": "Ported from Rockbox",
+      "icon": {
+        "url": "assets/crossfeed/73d9f53bb9651aa231acc3bcb5d8929c02d928162ae50d8160236ab464563458/settings-crossfeed.png",
+        "sha256": "73d9f53bb9651aa231acc3bcb5d8929c02d928162ae50d8160236ab464563458",
+        "size": 1101,
+        "width": 78,
+        "height": 121
+      },
+      "screenshots": [
+        {
+          "url": "assets/crossfeed/1e64ea99569fc61f303e24277a81c2f1cfc0f556e45a01eaa6eb339e02c414fe/settings.png",
+          "sha256": "1e64ea99569fc61f303e24277a81c2f1cfc0f556e45a01eaa6eb339e02c414fe",
+          "size": 12803,
+          "width": 320,
+          "height": 240,
+          "alt": "Crossfeed in Simple mode with the response graph for each ear."
+        }
+      ]
+    },
+    {
+      "id": "dsp",
+      "name": "DSP",
+      "description": "Signal processing the audio effects share: the look-ahead limiter, filter designs, the biquad cascade and the maths behind them.",
+      "version": "0.1.0",
+      "author": "RevolaOS",
+      "license": "GPL-3.0-only",
+      "category": "library",
+      "api": "1.74",
+      "requires": [],
+      "firmware_id": "660eb6ff",
+      "repo": "RepriseOS/repriseos-extensions",
+      "source_path": "extensions/dsp",
+      "tag_prefix": "dsp/v",
+      "details": "Provides the filters and signal processing functions used by Crossfeed and other audio extensions.",
+      "release": {
+        "tag": "dsp/v0.1.0",
+        "url": "https://github.com/RepriseOS/repriseos-extensions/releases/tag/dsp%2Fv0.1.0",
+        "commit": "0adfafd4c8d0594a7a350b1bee6cf84f3f86d089",
+        "published_at": "2026-11-24T15:05:38Z"
+      },
+      "package": {
+        "url": "assets/dsp/fb40f7fd2c2de8aecf056ff82e6d032a36eea075753ab56a2fe7027ed3b28b96/dsp.rvx",
+        "sha256": "fb40f7fd2c2de8aecf056ff82e6d032a36eea075753ab56a2fe7027ed3b28b96",
+        "size": 10352
+      },
+      "stability": "beta",
+      "note": "Partly adapted from RepriseOS",
+      "screenshots": []
+    },
+    {
       "id": "night-shift",
       "name": "Night Shift",
       "description": "Warm the display manually or follow sunset and sunrise in the iPod's time zone.",
