@@ -1,0 +1,24 @@
+[balance]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/balance"
+tag_prefix = "balance/v"
+
+[crossfeed]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/crossfeed"
+tag_prefix = "crossfeed/v"
+
+[night-shift]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/night-shift"
+tag_prefix = "night-shift/v"
+
+[playback-log]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/playback-log"
+tag_prefix = "playback-log/v"
+
+[dsp]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/dsp"
+tag_prefix = "dsp/v"

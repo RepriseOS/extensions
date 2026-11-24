@@ -7,4 +7,4 @@ This repository hosts the source for these RepriseOS extensions and accepts prop
 - [Playback Log](extensions/playback-log/) records listening history for scrobbling and optional detailed reports.
 - [Crossfeed](extensions/crossfeed/) blends a little of each stereo channel into the other for headphone listening. It uses the included [DSP library](extensions/dsp/).
 
-To propose an extension for the catalog, open a pull request here with a link to its repository and a short description of what it does.
+To add your extension to the catalog, open a PR following the [submission guide](catalog/README.md). Later releases are picked up automatically.

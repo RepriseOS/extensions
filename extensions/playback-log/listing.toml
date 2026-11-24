@@ -1,0 +1,5 @@
+details = "Enable Settings > Playback Log to record plays and skips in .scrobbler.log at the disk root. Configure optional detailed listening reports in /Reprise/playback-log.cfg."
+
+[[screenshots]]
+file = "screenshots/settings.png"
+alt = "Playback Log enabled in Settings with its document icon."

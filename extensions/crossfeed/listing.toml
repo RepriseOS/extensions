@@ -1,0 +1,5 @@
+details = "Open Settings > Crossfeed to blend the stereo channels for headphone listening. Choose Simple for a preset or Custom to adjust the filter and see its frequency response."
+
+[[screenshots]]
+file = "screenshots/settings.png"
+alt = "Crossfeed in Simple mode with the response graph for each ear."

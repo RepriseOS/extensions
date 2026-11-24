@@ -1,0 +1,102 @@
+name: Build extensions
+on:
+  pull_request:
+    paths-ignore: ['catalog/**', '.github/pull_request_template.md', '.github/workflows/submission.yml']
+  push:
+    branches: [main]
+    tags: ['*/v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/rvx-sdk
+      - name: Read pinned Rockbox revision
+        id: rockbox
+        run: echo "sha=$(jq -r .rockbox.commit .sdk/dependencies.lock)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: toolchain
+        with:
+          path: toolchains/rockbox-arm
+          key: rockbox-arm-${{ runner.os }}-${{ runner.arch }}-${{ steps.rockbox.outputs.sha }}
+      - if: steps.toolchain.outputs.cache-hit != 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: Rockbox/rockbox
+          ref: ${{ steps.rockbox.outputs.sha }}
+          sparse-checkout: tools
+          path: .rockbox
+          persist-credentials: false
+      - name: Build pinned ARM compiler
+        if: steps.toolchain.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bison flex texinfo libtool-bin autoconf automake
+          mkdir -p "$GITHUB_WORKSPACE/toolchains"
+          .rockbox/tools/rockboxdev.sh --target=a \
+            --prefix="$GITHUB_WORKSPACE/toolchains/rockbox-arm" \
+            --builddir="$RUNNER_TEMP/rockbox-build" \
+            --dlwhere="$RUNNER_TEMP/rockbox-download" --makeflags=-j8
+      - name: Build and check packages and catalog
+        env:
+          CROSS_COMPILE: ${{ github.workspace }}/toolchains/rockbox-arm/bin/arm-elf-eabi-
+        run: |
+          make -j8
+          make check
+          python3 tools/catalog.py preview
+          python3 -m unittest discover -s tests
+      - name: Select tagged package
+        if: github.ref_type == 'tag'
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os, shutil, tomllib
+          from pathlib import Path
+          tag = os.environ["GITHUB_REF_NAME"]
+          for path in Path("extensions").glob("*/manifest.toml"):
+              doc = tomllib.loads(path.read_text())
+              if tag == f"{doc['id']}/v{doc['version']}":
+                  Path("release").mkdir()
+                  shutil.copy(Path("build/Extensions") / (doc["id"] + ".rvx"), "release")
+                  break
+          else:
+              raise SystemExit(f"No extension matches {tag}")
+          PY
+      - if: github.ref_type == 'tag'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release
+          path: release/*.rvx
+          if-no-files-found: error
+
+  publish:
+    if: github.ref_type == 'tag' && github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release
+          path: release
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if ! gh release view "$TAG" > /dev/null 2>&1; then
+            gh release create "$TAG" --verify-tag --draft --title "$TAG" --notes ""
+          fi
+          if [[ "$(gh release view "$TAG" --json isDraft --jq .isDraft)" == true ]]; then
+            gh release upload "$TAG" release/*.rvx --clobber
+            gh release edit "$TAG" --draft=false
+          fi

@@ -1,0 +1,40 @@
+name: Catalog submission
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    paths:
+      - catalog/sources.toml
+      - tools/catalog.py
+      - .github/workflows/submission.yml
+      - .github/actions/rvx-sdk/action.yml
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Check catalog submission
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/rvx-sdk
+      - name: Check registry formatting
+        run: pipx run --spec taplo==0.9.3 taplo fmt --check catalog/sources.toml
+      - name: Verify proposed sources and release assets
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          args=()
+          if git cat-file -e "$BASE_SHA:catalog/sources.toml"; then
+            git show "$BASE_SHA:catalog/sources.toml" > "$RUNNER_TEMP/base.toml"
+            args+=(--base-registry "$RUNNER_TEMP/base.toml")
+          fi
+          if git show-ref --verify --quiet refs/remotes/origin/catalog; then
+            git show refs/remotes/origin/catalog:catalog-v1.json > "$RUNNER_TEMP/catalog-v1.json"
+            args+=(--published-index "$RUNNER_TEMP/catalog-v1.json")
+          fi
+          python3 tools/catalog.py review --pr-event "$GITHUB_EVENT_PATH" "${args[@]}"

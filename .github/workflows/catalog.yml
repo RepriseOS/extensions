@@ -1,0 +1,69 @@
+name: Refresh extension catalog
+on:
+  schedule:
+    - cron: '17 */5 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['catalog/**', 'tools/catalog.py', '.github/workflows/catalog.yml', '.github/actions/rvx-sdk/**']
+
+permissions:
+  contents: write
+concurrency:
+  group: publish-extension-catalog
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    if: github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/rvx-sdk
+      - name: Open published catalog
+        run: |
+          out="$RUNNER_TEMP/published"
+          ref=$(git ls-remote --heads origin refs/heads/catalog)
+          if [[ -n "$ref" ]]; then
+            git fetch --depth=1 origin refs/heads/catalog
+            git worktree add --detach "$out" FETCH_HEAD
+          else
+            git worktree add --detach "$out" HEAD
+            git -C "$out" switch --orphan catalog
+          fi
+      - name: Check approved releases
+        id: sync
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          status=0
+          python3 tools/catalog.py sync --out "$RUNNER_TEMP/published" || status=$?
+          case "$status" in
+            0) ;;
+            2) echo "rejected=true" >> "$GITHUB_OUTPUT" ;;
+            *) exit "$status" ;;
+          esac
+      - name: Publish changed entries
+        id: publish
+        working-directory: ${{ runner.temp }}/published
+        run: |
+          test -f catalog-v1.json
+          git add -- catalog-v1.json
+          if [[ -d assets ]]; then git add -- assets; fi
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'chore: refresh extension catalog'
+            revision=$(git rev-parse HEAD)
+            git -C "$GITHUB_WORKSPACE" push origin "$revision:refs/heads/catalog"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Request static site rebuild
+        if: steps.publish.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+        env:
+          DEPLOY_HOOK: ${{ secrets.SITE_DEPLOY_HOOK }}
+        run: |
+          if [[ -n "$DEPLOY_HOOK" ]]; then
+            curl --fail --silent --show-error --retry 2 -X POST "$DEPLOY_HOOK" -o /dev/null
+          fi
+      - name: Report rejected updates
+        if: steps.sync.outputs.rejected == 'true'
+        run: exit 1

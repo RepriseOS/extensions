@@ -1,0 +1,5 @@
+details = "Adjust the stereo balance from Settings > Balance. Turn the wheel to move the sound left or right, or hold Select to return to center."
+
+[[screenshots]]
+file = "screenshots/settings.png"
+alt = "Balance set one decibel to the right with the stereo image above it."
