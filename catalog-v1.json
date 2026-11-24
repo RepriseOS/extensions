@@ -1,4 +1,138 @@
 {
   "schema_version": 1,
-  "extensions": []
+  "extensions": [
+    {
+      "id": "balance",
+      "name": "Balance",
+      "description": "Shift the sound towards the left or right ear in decibel steps, or play one ear only.",
+      "version": "0.1.0",
+      "author": "RevolaOS",
+      "license": "GPL-3.0-only",
+      "category": "effects",
+      "api": "1.78",
+      "requires": [],
+      "firmware_id": "660eb6ff",
+      "repo": "RepriseOS/repriseos-extensions",
+      "source_path": "extensions/balance",
+      "tag_prefix": "balance/v",
+      "details": "Adjust the stereo balance from Settings > Balance. Turn the wheel to move the sound left or right, or hold Select to return to center.",
+      "release": {
+        "tag": "balance/v0.1.0",
+        "url": "https://github.com/RepriseOS/repriseos-extensions/releases/tag/balance%2Fv0.1.0",
+        "commit": "0adfafd4c8d0594a7a350b1bee6cf84f3f86d089",
+        "published_at": "2026-11-24T14:53:54Z"
+      },
+      "package": {
+        "url": "assets/balance/6556e3b715dda41e60e858d9fcc18687994f726c82ebcc95fb21b5f4f6ec9a05/balance.rvx",
+        "sha256": "6556e3b715dda41e60e858d9fcc18687994f726c82ebcc95fb21b5f4f6ec9a05",
+        "size": 6416
+      },
+      "stability": "beta",
+      "icon": {
+        "url": "assets/balance/81ce3f1f131455283ab9ac8a2be9570a994494a6f693800a138422fe5e5eed3e/settings-balance.png",
+        "sha256": "81ce3f1f131455283ab9ac8a2be9570a994494a6f693800a138422fe5e5eed3e",
+        "size": 1283,
+        "width": 78,
+        "height": 121
+      },
+      "screenshots": [
+        {
+          "url": "assets/balance/44d0773a2c9ed58131d496a9b19a0e01e498ed3816a5de5a912e562cfd71c4d3/settings.png",
+          "sha256": "44d0773a2c9ed58131d496a9b19a0e01e498ed3816a5de5a912e562cfd71c4d3",
+          "size": 6880,
+          "width": 320,
+          "height": 240,
+          "alt": "Balance set one decibel to the right with the stereo image above it."
+        }
+      ]
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "description": "Warm the display manually or follow sunset and sunrise in the iPod's time zone.",
+      "version": "0.1.0",
+      "author": "RepriseOS and RevolaOS contributors",
+      "license": "GPL-3.0-only",
+      "category": "system",
+      "api": "1.81",
+      "requires": [],
+      "firmware_id": "660eb6ff",
+      "repo": "RepriseOS/repriseos-extensions",
+      "source_path": "extensions/night-shift",
+      "tag_prefix": "night-shift/v",
+      "details": "Choose On, Off, or Auto in Settings > Night Shift. Auto follows sunset and sunrise in the iPod’s time zone.",
+      "release": {
+        "tag": "night-shift/v0.1.0",
+        "url": "https://github.com/RepriseOS/repriseos-extensions/releases/tag/night-shift%2Fv0.1.0",
+        "commit": "0adfafd4c8d0594a7a350b1bee6cf84f3f86d089",
+        "published_at": "2026-11-24T14:53:48Z"
+      },
+      "package": {
+        "url": "assets/night-shift/c73f849b2e94ab5fb0c562985a026b54fb6a3cd51bdb5eb321d287f95e559137/night-shift.rvx",
+        "sha256": "c73f849b2e94ab5fb0c562985a026b54fb6a3cd51bdb5eb321d287f95e559137",
+        "size": 5172
+      },
+      "icon": {
+        "url": "assets/night-shift/1d6b73bf783857ca8f7dbee4c925152d6e3b3affb3fd7c9a69077a8adbdaf114/settings-night-shift.png",
+        "sha256": "1d6b73bf783857ca8f7dbee4c925152d6e3b3affb3fd7c9a69077a8adbdaf114",
+        "size": 1508,
+        "width": 78,
+        "height": 121
+      },
+      "screenshots": [
+        {
+          "url": "assets/night-shift/915e16e15094c78a612c628c63621c574c289c4dd60acfa04927bf6df8e36ec2/settings.png",
+          "sha256": "915e16e15094c78a612c628c63621c574c289c4dd60acfa04927bf6df8e36ec2",
+          "size": 8241,
+          "width": 320,
+          "height": 240,
+          "alt": "Night Shift settings with On selected and the moon icon in the preview pane."
+        }
+      ]
+    },
+    {
+      "id": "playback-log",
+      "name": "Playback Log",
+      "description": "Write a scrobbler log and optional detailed listening reports.",
+      "version": "0.1.0",
+      "author": "RepriseOS contributors",
+      "license": "GPL-3.0-only",
+      "category": "media",
+      "api": "1.82",
+      "requires": [],
+      "firmware_id": "660eb6ff",
+      "repo": "RepriseOS/repriseos-extensions",
+      "source_path": "extensions/playback-log",
+      "tag_prefix": "playback-log/v",
+      "details": "Enable Settings > Playback Log to record plays and skips in .scrobbler.log at the disk root. Configure optional detailed listening reports in /Reprise/playback-log.cfg.",
+      "release": {
+        "tag": "playback-log/v0.1.0",
+        "url": "https://github.com/RepriseOS/repriseos-extensions/releases/tag/playback-log%2Fv0.1.0",
+        "commit": "0adfafd4c8d0594a7a350b1bee6cf84f3f86d089",
+        "published_at": "2026-11-24T14:53:44Z"
+      },
+      "package": {
+        "url": "assets/playback-log/38c0e897e907b9e0d72be2fbbaa501271ad62601215e4f98f0c7394e1459fb23/playback-log.rvx",
+        "sha256": "38c0e897e907b9e0d72be2fbbaa501271ad62601215e4f98f0c7394e1459fb23",
+        "size": 8948
+      },
+      "icon": {
+        "url": "assets/playback-log/8c08b77a77ca44c3a5dc0b42bbc2c9acdbb25dded451f65edf84aa5357625896/settings-playback-log.png",
+        "sha256": "8c08b77a77ca44c3a5dc0b42bbc2c9acdbb25dded451f65edf84aa5357625896",
+        "size": 1209,
+        "width": 78,
+        "height": 121
+      },
+      "screenshots": [
+        {
+          "url": "assets/playback-log/5818250fe515088097099f36eabed5a7fd763c83d696803a5273e34c1b2c43d2/settings.png",
+          "sha256": "5818250fe515088097099f36eabed5a7fd763c83d696803a5273e34c1b2c43d2",
+          "size": 29579,
+          "width": 320,
+          "height": 240,
+          "alt": "Playback Log enabled in Settings with its document icon."
+        }
+      ]
+    }
+  ]
 }
