@@ -1,10 +1,13 @@
+import contextlib
 import hashlib
+import io
 import json
 import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 import catalog
@@ -49,7 +52,8 @@ class CatalogTests(unittest.TestCase):
                 self.assertEqual(len(data), asset["size"])
         self.assertEqual(entries["crossfeed"]["requires"], ["dsp"])
 
-    def test_remote_release_and_failed_update_retains_all_assets(self):
+    @contextlib.contextmanager
+    def balance_release(self, cores=(("0.4.0", 0x10052),), listing=b""):
         source = self.sources["balance"]
         repo = source["repo"]
         folder = catalog.ROOT / source["path"]
@@ -67,20 +71,187 @@ class CatalogTests(unittest.TestCase):
                 return package
             base = f"https://raw.githubusercontent.com/{repo}/{'a' * 40}/extensions/balance/"
             self.assertTrue(url.startswith(base))
-            return (folder / url.removeprefix(base)).read_bytes()
+            data = (folder / url.removeprefix(base)).read_bytes()
+            return listing + data if url.endswith("/listing.toml") else data
 
-        sources = {"balance": source}
         with (
             patch.object(catalog, "releases", return_value=[release]),
+            patch.object(catalog, "core_releases", return_value=list(cores)),
             patch.object(catalog, "api_json", return_value={"sha": "a" * 40}),
             patch.object(catalog, "read_url", side_effect=download),
         ):
+            yield release
+
+    def test_remote_release_and_failed_update_retains_all_assets(self):
+        sources = {"balance": self.sources["balance"]}
+        with self.balance_release() as release:
             self.assertEqual(catalog.generate(sources, self.out, catalog.remote), [])
             before = self.entries()
+            self.assertEqual(before["balance"]["min_repriseos"], "0.4.0")
             release["tag_name"] = "balance/v0.1.1"
             self.assertTrue(catalog.generate(sources, self.out, catalog.remote))
             self.assertEqual(before, self.entries())
             self.assertTrue((self.out / before["balance"]["package"]["url"]).exists())
+
+    def test_update_waits_for_a_core_release(self):
+        sources = {"balance": self.sources["balance"]}
+        with self.balance_release(cores=[("0.4.0", 0x10040)]):
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                self.assertEqual(
+                    catalog.generate(sources, self.out, catalog.remote), []
+                )
+            self.assertEqual(self.entries(), {})
+            self.assertIn("balance 0.1.0 waits for", stderr.getvalue())
+
+    def test_held_back_update_keeps_the_published_entry(self):
+        sources = {"balance": self.sources["balance"]}
+        with self.balance_release():
+            self.assertEqual(catalog.generate(sources, self.out, catalog.remote), [])
+        index = self.out / "catalog-v1.json"
+        index.write_text(index.read_text().replace('"0.1.0"', '"0.0.9"'))
+        before = self.entries()
+        with self.balance_release(cores=[("0.4.0", 0x10040)]):
+            with contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(
+                    catalog.generate(sources, self.out, catalog.remote), []
+                )
+        self.assertEqual(self.entries(), before)
+
+    def test_kept_entry_of_a_waiting_dependent_gains_the_derived_release(self):
+        sources = {"lib": {"repo": "creator/lib"}, "player": {"repo": "creator/player"}}
+        published = {
+            "id": "player",
+            "version": "1.0.0",
+            "api": "1.78",
+            "category": "media",
+            "requires": [],
+            "repo": "creator/player",
+            "source_path": "",
+            "tag_prefix": "v",
+            "release": {"tag": "v1.0.0"},
+        }
+        index = self.out / "catalog-v1.json"
+        index.write_text(json.dumps({"schema_version": 1, "extensions": [published]}))
+
+        def fetch(identifier, source, old):
+            entry = dict(published, version="1.1.0", requires=["lib"], id=identifier)
+            if identifier == "lib":
+                raise catalog.HeldBack(
+                    "lib 1.0.0 waits", dict(entry, category="library")
+                )
+            return entry, {}
+
+        with (
+            patch.object(catalog, "core_releases", return_value=[("0.4.0", 0x10052)]),
+            contextlib.redirect_stderr(io.StringIO()),
+        ):
+            self.assertEqual(catalog.generate(sources, self.out, fetch), [])
+        player = self.entries()["player"]
+        self.assertEqual(
+            (player["version"], player["min_repriseos"]), ("1.0.0", "0.4.0")
+        )
+
+    def test_published_entries_gain_the_derived_release(self):
+        sources = {"balance": self.sources["balance"]}
+        with self.balance_release():
+            self.assertEqual(catalog.generate(sources, self.out, catalog.remote), [])
+            index = self.out / "catalog-v1.json"
+            document = json.loads(index.read_text())
+            del document["extensions"][0]["min_repriseos"]
+            index.write_text(json.dumps(document))
+            self.assertEqual(catalog.generate(sources, self.out, catalog.remote), [])
+        self.assertEqual(self.entries()["balance"]["min_repriseos"], "0.4.0")
+
+    def test_dependents_of_a_held_back_library_wait_too(self):
+        sources = {"lib": {"repo": "creator/lib"}, "player": {"repo": "creator/player"}}
+
+        def fetch(identifier, source, old):
+            entry = {
+                "id": identifier,
+                "version": "1.0.0",
+                "category": "library" if identifier == "lib" else "media",
+                "requires": [] if identifier == "lib" else ["lib"],
+            }
+            if identifier == "lib":
+                raise catalog.HeldBack("lib 1.0.0 waits", entry)
+            return entry, {}
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            self.assertEqual(catalog.generate(sources, self.out, fetch), [])
+        self.assertEqual(self.entries(), {})
+        self.assertIn("player waits for libraries ['lib']", stderr.getvalue())
+
+    def test_a_library_chain_waits_for_its_held_back_end(self):
+        sources = {k: {"repo": f"creator/{k}"} for k in ("b", "a", "lib")}
+        needs = {"b": ["a"], "a": ["lib"], "lib": []}
+
+        def fetch(identifier, source, old):
+            entry = {
+                "id": identifier,
+                "version": "1.0.0",
+                "category": "media" if identifier == "b" else "library",
+                "requires": needs[identifier],
+            }
+            if identifier == "lib":
+                raise catalog.HeldBack("lib 1.0.0 waits", entry)
+            return entry, {}
+
+        with contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(catalog.generate(sources, self.out, fetch), [])
+        self.assertEqual(self.entries(), {})
+
+    def test_submission_accepts_a_release_waiting_for_a_core(self):
+        entry = {"category": "media", "requires": [], "version": "1.0.0"}
+        entry["package"] = {"sha256": "verified"}
+        held = catalog.HeldBack("player 1.0.0 waits", entry)
+        with (
+            patch.object(catalog, "remote", side_effect=held),
+            contextlib.redirect_stdout(io.StringIO()) as stdout,
+        ):
+            catalog.review({"player": {"repo": "creator/player"}}, {})
+        self.assertIn("player 1.0.0 waits", stdout.getvalue())
+
+    def test_listing_can_raise_the_derived_release(self):
+        sources = {"balance": self.sources["balance"]}
+        for listing, expected in (
+            (b'min_repriseos = "0.9.0"\n', "0.9.0"),
+            (b'min_repriseos = "0.1.0"\n', "0.4.0"),
+        ):
+            with self.subTest(listing=listing), self.balance_release(listing=listing):
+                (self.out / "catalog-v1.json").unlink(missing_ok=True)
+                self.assertEqual(
+                    catalog.generate(sources, self.out, catalog.remote), []
+                )
+                self.assertEqual(self.entries()["balance"]["min_repriseos"], expected)
+
+    def test_core_releases_read_the_api_at_each_tag(self):
+        tags = ["v0.5.0", "sdk/v1.84.0", "v0.4.0", "v0.3.1", "v0.4.1-beta"]
+        headers = {
+            "v0.4.0": b"RVX_API_MAJOR = 1,\n    RVX_API = (RVX_API_MAJOR << 16) | 82\n",
+            "v0.5.0": b"RVX_API_MAJOR = 1,\n    RVX_API = (RVX_API_MAJOR << 16) | 84\n",
+        }
+
+        def download(url, limit):
+            tag = url.split("/")[5].replace("%2F", "/")
+            if tag not in headers:
+                raise HTTPError(url, 404, "Not Found", None, None)
+            return headers[tag]
+
+        with (
+            patch.object(
+                catalog, "releases", return_value=[{"tag_name": t} for t in tags]
+            ),
+            patch.object(catalog, "read_url", side_effect=download),
+        ):
+            cores = catalog.core_releases.__wrapped__()
+        self.assertEqual(cores, [("0.4.0", 0x10052), ("0.5.0", 0x10054)])
+        with patch.object(catalog, "core_releases", return_value=cores):
+            self.assertEqual(catalog.first_release(0x1004E), "0.4.0")
+            self.assertEqual(catalog.first_release(0x10053), "0.5.0")
+            self.assertIsNone(catalog.first_release(0x10055))
+            self.assertIsNone(catalog.first_release(0x20000))
 
     def test_missing_dependency_and_unregistered_extension(self):
         self.assertEqual(catalog.generate(self.sources, self.out, self.preview), [])

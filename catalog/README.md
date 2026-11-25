@@ -19,11 +19,11 @@ file = "screenshots/settings.png"
 alt = "Describe the screen and the setting shown."
 ```
 
-Screenshots are optional. Use PNGs relative to the listing. The catalog uses the manifest's pane icon unless the listing sets `icon`. Optional listing fields include `author_handle` (GitHub username), `min_repriseos` (x.y.z) and `models` (iPod model names). Omit unknown compatibility values.
+Screenshots are optional. Use PNGs relative to the listing. The catalog uses the manifest's pane icon unless the listing sets `icon`. Optional listing fields include `author_handle` (GitHub username), `min_repriseos` (x.y.z) and `models` (iPod model names). Omit unknown compatibility values. The catalog sets `min_repriseos` to the first RepriseOS release that supports the manifest's `api`; a listing value only raises it.
 
 ## Publishing
 
-The scheduled Action scans approved sources about every five hours. It checks the released RVX against the tagged manifest and copies the verified package and images to the `catalog` branch. Invalid updates keep the previous valid version and appear in the workflow log. Removing a source from the registry removes its listing. The installer and site can read `catalog-v1.json` from that branch and resolve asset URLs relative to it. A configured `SITE_DEPLOY_HOOK` requests a site rebuild on changes.
+The scheduled Action scans approved sources about every five hours. It checks the released RVX against the tagged manifest and copies the verified package and images to the `catalog` branch. Invalid updates keep the previous valid version and appear in the workflow log. A release whose `api` is newer than every RepriseOS release also keeps the previous version and is published once a RepriseOS release supports it. Removing a source from the registry removes its listing. The installer and site can read `catalog-v1.json` from that branch and resolve asset URLs relative to it. A configured `SITE_DEPLOY_HOOK` requests a site rebuild on changes.
 
 For the extensions in this repo, a tag such as `balance/v0.1.0` builds and publishes the matching package. To preview the listings locally with the SDK and ARM compiler available:
 
