@@ -1,0 +1,17 @@
+id = "night-light"
+name = "Night Light"
+description = "Lowers the backlight below the stock minimum, with optional extra dimming, always or between set hours."
+version = "0.2.0"
+author = "SenPalpaMemes"
+license = "GPL-3.0-only"
+api = "1.81"
+category = "system"
+
+[[module]]
+name = "main"
+trigger = "always"
+
+[[asset]]
+name = "settings-night-light"
+file = "assets/settings-night-light.png"
+pane = "icon"
