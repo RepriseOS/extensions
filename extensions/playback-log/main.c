@@ -119,7 +119,7 @@ static void field_media_text(struct osos_media_item *item, enum osos_media_text 
         osos_media_item_text(item, field, &string);
     } else {
         uint16_t text[255];
-        uint32_t units = api->album_artist_read(item->record, text, 255);
+        uint32_t units = RV_OPTIONAL(reprise_album_artist_read, 0, item->record, text, 255);
         osos_native_string_assign_utf16(&string, text, units);
     }
     const char *text = osos_native_string_data(&string);
@@ -657,8 +657,6 @@ static const struct rv_descriptor extension = {
 const struct rv_descriptor *rv_module_entry(const struct rv_api *core,
                                             rv_extension_handle handle)
 {
-    if (!rv_has_reprise_services(core))
-        return NULL;
     api = core;
     self = handle;
     load_config();
