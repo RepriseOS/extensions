@@ -1,0 +1,6 @@
+details = "Lowers the backlight below the stock minimum, from level 6 down to level 1, with optional extra dimming, all the time or between set hours. Find it under Settings > Night Light, after Brightness."
+author_handle = "SenPalpaMemes"
+
+[[screenshots]]
+file = "screenshots/settings.png"
+alt = "The Night Light settings screen: Night Light, Backlight, Extra Dimming, From and Until."
