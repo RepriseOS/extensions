@@ -10,7 +10,7 @@ import sys
 import tomllib
 from functools import cache, partial
 from pathlib import Path
-from urllib.error import URLError
+from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 
@@ -24,6 +24,10 @@ import rvx
 VERSION = re.compile(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)", re.ASCII)
 REPO = re.compile(r"[A-Za-z0-9_-]+/[A-Za-z0-9_.-]+")
 FIRST_PARTY = "RepriseOS/repriseos-extensions"
+CORE = "RepriseOS/repriseos"
+CORE_API = re.compile(
+    r"RVX_API_MAJOR = (\d+),.*?RVX_API = \(RVX_API_MAJOR << 16\) \| (\d+)", re.DOTALL
+)
 MIB = 1024 * 1024
 
 
@@ -98,6 +102,58 @@ def newest(source):
         if tag.startswith(prefix) and VERSION.fullmatch(tag[len(prefix) :]):
             candidates[version_key(tag[len(prefix) :])] = release
     return candidates[max(candidates)] if candidates else None
+
+
+class HeldBack(Exception):
+    """A verified release whose RVX API no RepriseOS release provides yet."""
+
+    def __init__(self, message, entry):
+        super().__init__(message)
+        self.entry = entry
+
+
+@cache
+def core_releases():
+    result = []
+    for release in releases(CORE):
+        tag = release["tag_name"]
+        if not tag.startswith("v") or not VERSION.fullmatch(tag[1:]):
+            continue
+        # The core declares its API here; releases before RVX lack the file.
+        url = f"https://raw.githubusercontent.com/{CORE}/{quote(tag, safe='')}/payload/rvx/internal.h"
+        try:
+            header = read_url(url, MIB).decode()
+        except HTTPError as exc:
+            if exc.code == 404:
+                continue
+            raise
+        match = CORE_API.search(header)
+        if not match:
+            raise ValueError(f"RepriseOS {tag} declares no recognizable RVX API")
+        result.append((tag[1:], int(match[1]) << 16 | int(match[2])))
+    return sorted(result, key=lambda r: version_key(r[0]))
+
+
+def first_release(api):
+    return next(
+        (v for v, word in core_releases() if word >> 16 == api >> 16 and word >= api),
+        None,
+    )
+
+
+def require_release(identifier, entry):
+    """Raise min_repriseos to the first release whose core loads the entry.
+
+    Raises HeldBack when no release loads it yet.
+    """
+    core = first_release(manifest.api_word(entry["api"]))
+    if not core:
+        raise HeldBack(
+            f"{identifier} {entry['version']} waits for a RepriseOS release with RVX API {entry['api']}",
+            entry,
+        )
+    if version_key(core) > version_key(entry.get("min_repriseos", "0.0.0")):
+        entry["min_repriseos"] = core
 
 
 def required_text(value, name):
@@ -234,7 +290,7 @@ def remote(identifier, source, old):
         "commit": sha,
         "published_at": release["published_at"],
     }
-    return snapshot(
+    entry, files = snapshot(
         identifier,
         source,
         version,
@@ -242,6 +298,8 @@ def remote(identifier, source, old):
         package,
         info,
     )
+    require_release(identifier, entry)
+    return entry, files
 
 
 def preview(identifier, source, old, *, packages):
@@ -285,6 +343,7 @@ def generate(sources, out, fetch):
     entries = dict(old)
     pending = {}
     errors = []
+    held = set()
     for identifier, source in sources.items():
         try:
             update = fetch(identifier, source, old.get(identifier))
@@ -295,6 +354,9 @@ def generate(sources, out, fetch):
                 ):
                     raise ValueError("a published library must keep its category")
                 entries[identifier], pending[identifier] = update
+        except HeldBack as exc:
+            held.add(identifier)
+            print(exc, file=sys.stderr)
         except (
             ValueError,
             TypeError,
@@ -308,10 +370,33 @@ def generate(sources, out, fetch):
         ) as exc:
             errors.append(f"{identifier}: {exc}")
 
-    for identifier, entry in list(entries.items()):
-        missing = unavailable_libraries(entry, entries)
-        if missing:
-            errors.append(f"{identifier}: unavailable libraries {missing}")
+    # Entries published before releases were checked gain min_repriseos.
+    for identifier, entry in old.items():
+        if entry["release"]:
+            try:
+                require_release(identifier, entry)
+            except HeldBack:
+                print(
+                    f"{identifier} {entry['version']} stays listed without min_repriseos",
+                    file=sys.stderr,
+                )
+            except (ValueError, URLError, OSError) as exc:
+                errors.append(f"{identifier}: {exc}")
+
+    # Dropping a library can strand entries checked before it, so repeat.
+    changed = True
+    while changed:
+        changed = False
+        for identifier, entry in list(entries.items()):
+            missing = unavailable_libraries(entry, entries)
+            if not missing:
+                continue
+            changed = True
+            if held.issuperset(missing):
+                held.add(identifier)
+                print(f"{identifier} waits for libraries {missing}", file=sys.stderr)
+            else:
+                errors.append(f"{identifier}: unavailable libraries {missing}")
             pending.pop(identifier, None)
             previous = old.get(identifier)
             if previous and not unavailable_libraries(previous, entries):
@@ -375,7 +460,11 @@ def review(sources, previous, body=None, index=None):
             continue
         if identifier not in previous and body is not None:
             submission_body(body, source["repo"])
-        release = remote(identifier, source, None)
+        try:
+            release = remote(identifier, source, None)
+        except HeldBack as exc:
+            print(exc)
+            release = exc.entry, {}
         if not release:
             raise ValueError(
                 f"{identifier}: publish a stable release before submitting"
@@ -398,7 +487,11 @@ def review(sources, previous, body=None, index=None):
                 if dep not in local:
                     local[dep] = local_manifest(dep, sources[dep])
             elif dep not in entries:
-                release = remote(dep, sources[dep], None)
+                try:
+                    release = remote(dep, sources[dep], None)
+                except HeldBack as exc:
+                    print(exc)
+                    release = exc.entry, {}
                 if release:
                     entries[dep] = release[0]
         available = entries | local if identifier in local else entries
