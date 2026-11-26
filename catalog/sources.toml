@@ -22,3 +22,18 @@ tag_prefix = "playback-log/v"
 repo = "RepriseOS/repriseos-extensions"
 path = "extensions/dsp"
 tag_prefix = "dsp/v"
+
+[album-artists]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/album-artists"
+tag_prefix = "album-artists/v"
+
+[file-info]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/file-info"
+tag_prefix = "file-info/v"
+
+[playback-queue]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/playback-queue"
+tag_prefix = "playback-queue/v"

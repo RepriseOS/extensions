@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: GPL-3.0-only
 SDK ?= ../osos-lab/rvx-sdk
 OUT ?= build
-extensions := balance crossfeed dsp night-shift playback-log
+extensions := album-artists balance crossfeed dsp file-info night-shift playback-log \
+              playback-queue
 
 .PHONY: all $(extensions)
 all: $(extensions)
@@ -13,9 +14,11 @@ $(extensions):
 
 .PHONY: check
 check:
+	$(PYTHON) extensions/album-artists/tests/run.py "$(abspath $(SDK))"
 	$(PYTHON) extensions/balance/tests/run.py "$(abspath $(SDK))"
 	$(PYTHON) extensions/crossfeed/tests/run.py "$(abspath $(SDK))"
 	$(PYTHON) extensions/dsp/tests/run.py "$(abspath $(SDK))"
+	$(PYTHON) extensions/file-info/tests/run.py "$(abspath $(SDK))"
 	@mkdir -p "$(OUT)"
 	$(CC) $(TEST_FLAGS) extensions/night-shift/test.c -o "$(OUT)/test-night-shift"
 	"$(OUT)/test-night-shift"
