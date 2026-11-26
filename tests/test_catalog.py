@@ -55,7 +55,7 @@ class CatalogTests(unittest.TestCase):
         folder = catalog.ROOT / source["path"]
         package = (self.packages / "balance.rvx").read_bytes()
         release = {
-            "tag_name": "balance/v0.1.0",
+            "tag_name": "balance/v0.1.1",
             "published_at": "2026-11-24T00:00:00Z",
             "assets": [
                 {"name": "balance.rvx", "size": len(package), "state": "uploaded"}
@@ -77,7 +77,7 @@ class CatalogTests(unittest.TestCase):
         ):
             self.assertEqual(catalog.generate(sources, self.out, catalog.remote), [])
             before = self.entries()
-            release["tag_name"] = "balance/v0.1.1"
+            release["tag_name"] = "balance/v0.1.2"
             self.assertTrue(catalog.generate(sources, self.out, catalog.remote))
             self.assertEqual(before, self.entries())
             self.assertTrue((self.out / before["balance"]["package"]["url"]).exists())
@@ -182,7 +182,7 @@ class CatalogTests(unittest.TestCase):
             catalog.snapshot(
                 "balance",
                 source,
-                "0.1.0",
+                "0.1.1",
                 lambda path: (folder / path).read_bytes(),
                 package,
                 None,

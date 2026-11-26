@@ -1,10 +1,10 @@
 id = "balance"
 name = "Balance"
 description = "Shift the sound towards the left or right ear in decibel steps, or play one ear only."
-version = "0.1.0"
+version = "0.1.1"
 author = "RevolaOS"
 license = "GPL-3.0-only"
-api = "1.78"
+api = "1.86"
 stability = "beta"
 category = "effects"
 

@@ -4,7 +4,7 @@ description = "Write a scrobbler log and optional detailed listening reports."
 version = "0.1.2"
 author = "RepriseOS contributors"
 license = "GPL-3.0-only"
-api = "1.84"
+api = "1.86"
 category = "media"
 
 [libraries]
