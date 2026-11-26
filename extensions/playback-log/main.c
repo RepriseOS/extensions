@@ -1,4 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
+#include "../album-artists/service.h"
 #include "../shared/legacy.h"
 #include "native.h"
 #include "playback_log_config.h"
@@ -118,8 +119,10 @@ static void field_media_text(struct osos_media_item *item, enum osos_media_text 
     if (field) {
         osos_media_item_text(item, field, &string);
     } else {
+        const struct album_artists_service *albums =
+            api->extension_service(ALBUM_ARTISTS_ID);
         uint16_t text[255];
-        uint32_t units = RV_OPTIONAL(reprise_album_artist_read, 0, item->record, text, 255);
+        uint32_t units = albums ? albums->read(item->record, text, 255) : 0;
         osos_native_string_assign_utf16(&string, text, units);
     }
     const char *text = osos_native_string_data(&string);
