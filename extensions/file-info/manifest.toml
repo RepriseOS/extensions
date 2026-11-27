@@ -1,0 +1,13 @@
+id = "file-info"
+name = "File Info"
+description = "Show a song, episode, audiobook or video's tags and file properties from its context menu."
+version = "0.1.0"
+author = "RepriseOS contributors"
+license = "GPL-3.0-only"
+api = "1.89"
+stability = "beta"
+category = "media"
+
+[[module]]
+name = "main"
+trigger = "always"

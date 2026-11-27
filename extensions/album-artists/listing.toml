@@ -1,0 +1,11 @@
+details = "Choose Album Artists in Music to browse the library by Album Artist, with the Artist as the fallback. Settings > Music Menu and Settings > Main Menu show or hide the row."
+
+icon = "assets/settings-album-artists.png"
+
+[[screenshots]]
+file = "screenshots/list.png"
+alt = "The Album Artists list: All Albums, then the album artists of the library."
+
+[[screenshots]]
+file = "screenshots/albums.png"
+alt = "An album artist's albums with their artwork and song counts."
