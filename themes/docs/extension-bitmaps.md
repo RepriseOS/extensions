@@ -33,3 +33,4 @@ Regenerate this page with `python3 tools/extension_bitmaps_doc.py`.
 | `revola` | `optimize` | 78x121 | mask8 | - | yes |
 | `revola` | `other` | 78x121 | mask8 | - | yes |
 | `revola` | `system` | 78x121 | mask8 | - | yes |
+| `sound-menu` | `settings-sound` | 78x121 | mask8 | - | yes |
