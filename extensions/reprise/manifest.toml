@@ -4,7 +4,7 @@ description = "RepriseOS services its core provides to extensions. Nothing to in
 version = "0.1.0"
 author = "RepriseOS contributors"
 license = "GPL-3.0-only"
-api = "1.86"
+api = "1.89"
 category = "library"
 exports = [
     "reprise_legacy_preference",
