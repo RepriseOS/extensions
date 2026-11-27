@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 SDK ?= ../osos-lab/rvx-sdk
 OUT ?= build
-extensions := balance crossfeed dsp night-shift playback-log
+extensions := balance crossfeed dsp long-audio-fix night-shift playback-log
 
 .PHONY: all $(extensions)
 all: $(extensions)

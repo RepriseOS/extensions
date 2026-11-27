@@ -22,3 +22,8 @@ tag_prefix = "playback-log/v"
 repo = "RepriseOS/repriseos-extensions"
 path = "extensions/dsp"
 tag_prefix = "dsp/v"
+
+[long-audio-fix]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/long-audio-fix"
+tag_prefix = "long-audio-fix/v"
