@@ -1,0 +1,11 @@
+details = "Browse albums as a grid of covers from a Cover Grid row in Music after Cover Flow, and on the main menu once that row is switched on in Settings > Main Menu. Turn the wheel to move across the covers, press Select to open the album's songs."
+
+icon = "assets/settings-cover-grid.png"
+
+[[screenshots]]
+file = "screenshots/grid.png"
+alt = "The Cover Grid: four columns of album covers, the top-left cover lifted with a blue edge and a shadow, its album and artist in the bar at the bottom."
+
+[[screenshots]]
+file = "screenshots/album.png"
+alt = "An album's songs opened from the grid, in Apple's Songs list."
