@@ -236,7 +236,7 @@ static const struct rv_screen screens[] = {
 static const struct rv_menu_entry entries[] = {
     RV_MENU_ENTRY(RV_MENU_SETTINGS, RV_SETTINGS_BRIGHTNESS,
                   RV_ROW_PUSH("Appearance", "appearance"),
-                  .pane = RV_PANE(.caption = "Make it your own",
+                  .pane = RV_PANE(.caption = "Make It Your Own",
                                   .bitmap = RV_BITMAP("settings-appearance")),
                   .shown_by = KEY_AVAILABLE),
 };
