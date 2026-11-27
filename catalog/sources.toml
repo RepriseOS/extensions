@@ -23,6 +23,11 @@ repo = "RepriseOS/repriseos-extensions"
 path = "extensions/dsp"
 tag_prefix = "dsp/v"
 
+[fast-seek]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/fast-seek"
+tag_prefix = "fast-seek/v"
+
 [long-audio-fix]
 repo = "RepriseOS/repriseos-extensions"
 path = "extensions/long-audio-fix"
