@@ -22,3 +22,28 @@ tag_prefix = "playback-log/v"
 repo = "RepriseOS/repriseos-extensions"
 path = "extensions/dsp"
 tag_prefix = "dsp/v"
+
+[fast-seek]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/fast-seek"
+tag_prefix = "fast-seek/v"
+
+[long-audio-fix]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/long-audio-fix"
+tag_prefix = "long-audio-fix/v"
+
+[sleep-timer]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/sleep-timer"
+tag_prefix = "sleep-timer/v"
+
+[chapter-menu]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/chapter-menu"
+tag_prefix = "chapter-menu/v"
+
+[chapter-marks]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/chapter-marks"
+tag_prefix = "chapter-marks/v"
