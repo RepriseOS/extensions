@@ -3,6 +3,11 @@ repo = "RepriseOS/repriseos-extensions"
 path = "extensions/balance"
 tag_prefix = "balance/v"
 
+[cover-grid]
+repo = "RepriseOS/repriseos-extensions"
+path = "extensions/cover-grid"
+tag_prefix = "cover-grid/v"
+
 [crossfeed]
 repo = "RepriseOS/repriseos-extensions"
 path = "extensions/crossfeed"
