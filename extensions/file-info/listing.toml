@@ -1,0 +1,11 @@
+details = "Hold Select on a song, podcast or iTunes U episode, audiobook, movie, TV episode or video playlist entry, or in Now Playing, then choose File Info to see its tags and file properties."
+
+icon = "assets/settings-file-info.png"
+
+[[screenshots]]
+file = "screenshots/context-menu.png"
+alt = "A song's context menu with File Info above Play Next and Play Last."
+
+[[screenshots]]
+file = "screenshots/song.png"
+alt = "File Info for a compilation track: Title, Artist, Album Artist, Album and Year."
