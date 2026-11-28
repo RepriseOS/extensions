@@ -162,7 +162,7 @@ def snapshot(identifier, source, version, read_file, package, release):
     entry.update(
         category=manifest.category(doc),
         api=doc["api"],
-        requires=manifest.requires(doc),
+        requires=manifest.libraries(doc)[0],
         firmware_id=f"{header['firmware']:08x}",
         repo=source["repo"],
         source_path=source.get("path", ""),
@@ -359,7 +359,7 @@ def local_manifest(identifier, source):
     doc = tomllib.loads((folder / "manifest.toml").read_text())
     if doc["id"] != identifier or not (folder / "listing.toml").is_file():
         raise ValueError(f"{identifier}: expected matching local manifest and listing")
-    return {"category": manifest.category(doc), "requires": manifest.requires(doc)}
+    return {"category": manifest.category(doc), "requires": manifest.libraries(doc)[0]}
 
 
 def review(sources, previous, body=None, index=None):

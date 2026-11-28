@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
 
 /* What the dsp library exports, and the state its limiter and fade run on.
- * An effect lists `requires = ["dsp"]` in its manifest; rv.mk finds the
+ * An effect lists dsp under `[libraries] required`; rv.mk finds the
  * library and the core fills in the addresses when it loads. No
  * RV_MODULE_CALL here: a call into a library is a long call. */
 

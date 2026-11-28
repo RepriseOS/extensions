@@ -138,6 +138,8 @@ static int mock_seek(void *h, uint64_t n, int w)
 #define osos_file_read mock_read
 #define osos_file_close(h) ((void)(h))
 #define osos_file_seek mock_seek
+/* Weak like the optional.h of the build, so the tests against NULL stay. */
+#pragma weak reprise_legacy_preference
 #include "main.c"
 
 enum { FINISH, COMPLETE };
@@ -168,12 +170,18 @@ static int32_t mock_enabled(rv_extension_handle ext, uint16_t key)
     return 0;
 }
 
-static uint32_t read_artist(void *r, uint16_t *s, uint32_t n)
+uint32_t (reprise_legacy_preference)(uint32_t key, void *data, uint32_t capacity)
 {
-    (void)r;
-    (void)s;
-    (void)n;
+    (void)key;
+    (void)data;
+    (void)capacity;
     return 0;
+}
+
+static const void *mock_service(const char *id)
+{
+    assert(!strcmp(id, ALBUM_ARTISTS_ID));
+    return NULL;
 }
 
 static void configure(const char *text)
@@ -194,8 +202,8 @@ int main(void)
 {
     static const struct rv_api mock = {
         .hook_next = mock_next,
-        .album_artist_read = read_artist,
         .setting_get_int = mock_enabled,
+        .extension_service = mock_service,
     };
     api = &mock;
     load_config();
