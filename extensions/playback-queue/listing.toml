@@ -1,0 +1,15 @@
+details = "Hold Select on a song, album, artist or podcast episode and choose Play Next or Play Last. Choose Up Next in Music, or from the Now Playing context menu, to reorder, remove or clear the upcoming items."
+
+icon = "assets/settings-playback-queue.png"
+
+[[screenshots]]
+file = "screenshots/up-next.png"
+alt = "Up Next listing the upcoming songs with their artists."
+
+[[screenshots]]
+file = "screenshots/item-menu.png"
+alt = "Holding Select on an Up Next item: Move to Top, Move Up, Remove, Browse Compilation, File Info and Clear Up Next."
+
+[[screenshots]]
+file = "screenshots/clear.png"
+alt = "The Clear Up Next question with its Clear and Cancel buttons."

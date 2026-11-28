@@ -50,7 +50,8 @@ is left; an unfinished play is lost on an abrupt reset or power loss.
 | `percent` | `listened_ms` as a percentage of `length_ms`; rewinding can make it exceed 100. |
 | `ended` | `end` (played to the end), `skip` (next/previous button), `change` (another selection or stop). |
 | `apple` | `played` or `skipped` when the stock firmware updated that counter, otherwise `none`. |
-| `artist`, `album_artist`, `album`, `title` | Tags from the iTunesDB. |
+| `artist`, `album`, `title` | Tags from the iTunesDB. |
+| `album_artist` | The Album Artist from the Album Artists extension while it runs, when it differs from the artist; otherwise empty. |
 | `track`, `disc`, `year` | Numbers from the iTunesDB, `0` when missing. |
 | `genre`, `composer` | Tags from the iTunesDB. |
 | `bitrate` | Average kbps from the iTunesDB. |
